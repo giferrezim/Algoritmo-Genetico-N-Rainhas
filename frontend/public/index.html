@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>N-Rainhas | Algoritmo Genético</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --chess-dark: #1a1a1a;
+      --chess-light: #f5f5f5;
+      --wood-dark: #2c1810;
+      --wood-medium: #5c3d2e;
+      --wood-light: #8b5a2b;
+      --gold: #d4af37;
+      --gold-light: #f4d03f;
+      --square-light: #f0d9b5;
+      --square-dark: #b58863;
+      --safe-green: #2ecc71;
+      --conflict-red: #e74c3c;
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+    }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      background: var(--chess-dark);
+      min-height: 100vh;
+      color: var(--chess-light);
+      overflow-x: auto;
+    }
+
+    /* Padrão de xadrez de fundo */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(45deg, #222 25%, transparent 25%),
+        linear-gradient(-45deg, #222 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #222 75%),
+        linear-gradient(-45deg, transparent 75%, #222 75%);
+      background-size: 60px 60px;
+      background-position: 0 0, 0 30px, 30px -30px, -30px 0px;
+      opacity: 0.3;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1600px;
+      min-width: fit-content;
+      margin: 0 auto;
+      padding: 30px 20px;
+    }
+
+    /* Header com coroa */
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .crown-icon {
+      font-size: 2.5rem;
+      color: var(--gold);
+      text-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--chess-light);
+      margin: 10px 0 5px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-weight: 300;
+    }
+
+    /* Layout principal em duas colunas */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 380px 1fr;
+      gap: 30px;
+      align-items: start;
+    }
+
+    /* Coluna direita - Visualização */
+    .right-panel {
+      min-height: 600px;
+    }
+
+    /* Cards com efeito glassmorphism */
+    .card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 20px;
+      padding: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+    }
+
+    .card-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.1rem;
+      color: var(--gold);
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title span {
+      position: relative;
+    }
+
+    /* Form vertical */
+    .form-vertical {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .form-item {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 0.7);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    input[type="number"] {
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      font-family: 'Cinzel', serif;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: var(--chess-light);
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    select {
+      padding: 12px 14px;
+      font-size: 0.95rem;
+      font-family: 'Raleway', sans-serif;
+      background: rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: var(--chess-light);
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+
+    /* Esconder setas dos inputs number por padrão */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button {
+      opacity: 0;
+      height: auto;
+      cursor: pointer;
+    }
+
+    /* Mostrar setas quando em foco */
+    input[type="number"]:focus::-webkit-inner-spin-button,
+    input[type="number"]:focus::-webkit-outer-spin-button {
+      opacity: 1;
+    }
+
+    input[type="number"]:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--gold);
+      box-shadow: 0 0 20px rgba(212, 175, 55, 0.2);
+    }
+
+    input[type="number"]:disabled {
+      background: rgba(0, 0, 0, 0.2);
+      color: rgba(255, 255, 255, 0.3);
+      cursor: not-allowed;
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .form-item.disabled label {
+      color: rgba(255, 255, 255, 0.3);
+    }
+
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23d4af37' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      padding-right: 36px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    select option {
+      background: #1a1a1a;
+      color: #ffffff;
+      padding: 12px;
+    }
+
+    select option:checked {
+      background: #2a2a2a;
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    /* Botão principal */
+    #submitBtn {
+      padding: 16px 30px;
+      font-size: 1.15rem;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 50%, var(--gold) 100%);
+      background-size: 200% auto;
+      color: var(--chess-dark);
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-top: 10px;
+      box-shadow: 0 5px 20px rgba(212, 175, 55, 0.3);
+      width: 100%;
+    }
+
+    #submitBtn:hover {
+      background-position: right center;
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.5);
+    }
+
+    #submitBtn:disabled {
+      background: #555;
+      color: #888;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Botões gerais */
+    button {
+      padding: 12px 28px;
+      font-size: 0.95rem;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--chess-light);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    button:disabled {
+      background: #333;
+      color: #666;
+      cursor: not-allowed;
+      transform: none;
+      border-color: transparent;
+    }
+
+    /* Loading */
+    #loading {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      padding: 40px 60px;
+      font-size: 1.2rem;
+      color: var(--gold);
+      background: rgba(0, 0, 0, 0.8);
+      border-radius: 16px;
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    #loading.show {
+      display: block;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(212, 175, 55, 0.2);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 15px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Barra de estatísticas */
+    .stats-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 25px;
+      padding: 18px 25px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 16px;
+      margin-bottom: 25px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .stat-icon {
+      font-size: 2rem;
+      opacity: 0.9;
+      position: relative;
+      top: 0;
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    .stat-content {
+      display: flex;
+      flex-direction: column-reverse;
+    }
+
+    .stat-value {
+      font-family: 'Cinzel', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 0.80rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+      font-family: 'Cinzel', serif;
+    }
+
+    .stat-divider {
+      width: 1px;
+      height: 35px;
+      background: linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.3), transparent);
+    }
+
+    /* Área do tabuleiro com duas colunas */
+    .board-area {
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      align-items: center;
+      padding: 20px 0;
+      transition: all 0.5s ease;
+      position: relative;
+      flex-wrap: nowrap;
+      min-width: fit-content;
+      margin-left: 65px; /* Ajuste para mover mais à direita */
+    }
+
+    .board-column {
+      display: flex;
+      justify-content: center;
+      transition: all 0.5s ease;
+    }
+
+    /* Quando os cards estão visíveis, ajustar posição do tabuleiro */
+    .board-area:has(.menu-column.visible) .board-column {
+      margin-left: -50px; /* Ajuste para mover o tabuleiro para a esquerda após animação */
+    }
+
+    .menu-column {
+      width: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.5s ease;
+    }
+
+    .menu-column.visible {
+      width: 280px;
+      opacity: 1;
+    }
+
+    /* Classe comum para panels */
+    .menu-panel,
+    .data-only-panel {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      min-width: 260px;
+      height: 550px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .menu-title {
+      font-family: 'Cinzel', serif;
+      font-size: 1.3rem;
+      color: var(--gold);
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .menu-section {
+      margin-bottom: 20px;
+    }
+
+    .menu-section:last-child {
+      margin-bottom: 0;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .menu-label {
+      display: block;
+      font-size: 0.85rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
+    }
+
+    .menu-section .view-mode-tabs {
+      flex-direction: column;
+      width: 100%;
+    }
+
+    .menu-section .view-tab {
+      justify-content: center;
+      width: 100%;
+    }
+
+    .menu-section .filter-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-start;
+      max-height: 300px;
+      overflow-y: auto;
+      padding-right: 5px;
+    }
+
+    /* Scrollbar estilizada comum */
+    .menu-section .filter-chips::-webkit-scrollbar,
+    .data-only-panel .data-panel::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .menu-section .filter-chips::-webkit-scrollbar-track,
+    .data-only-panel .data-panel::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 3px;
+    }
+
+    .menu-section .filter-chips::-webkit-scrollbar-thumb,
+    .data-only-panel .data-panel::-webkit-scrollbar-thumb {
+      background: var(--gold);
+      border-radius: 3px;
+    }
+
+    .menu-section .filter-chips::-webkit-scrollbar-thumb:hover,
+    .data-only-panel .data-panel::-webkit-scrollbar-thumb:hover {
+      background: var(--gold-light);
+    }
+
+    .data-section {
+      flex: 1;
+    }
+
+    .data-panel {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 15px;
+      min-height: 100px;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    /* Tabs de modo de visualização */
+    .view-mode-tabs {
+      display: inline-flex;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 4px;
+      gap: 4px;
+    }
+
+    .view-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 12px 18px;
+      border: none;
+      border-radius: 7px;
+      background: transparent;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Raleway', sans-serif;
+    }
+
+    .view-tab:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.9);
+    }
+
+    .view-tab.active {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--chess-dark);
+      font-weight: 600;
+    }
+
+    .tab-icon {
+      font-size: 0.95rem;
+    }
+
+    .filter-chips {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* Container do tabuleiro */
+    #boardContainer {
+      display: none;
+      justify-content: center;
+      padding: 10px 0;
+    }
+
+    #boardContainer.visible {
+      display: flex;
+    }
+
+    .board-wrapper {
+      padding: 15px;
+      background: #1a1a1a;
+      border-radius: 8px;
+      box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.7),
+        inset 0 2px 0 rgba(255, 255, 255, 0.1),
+        inset 0 -2px 0 rgba(0, 0, 0, 0.3);
+    }
+
+    #board {
+      display: inline-grid;
+      gap: 0;
+      border: 4px solid #000000;
+      box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+    }
+
+    .square {
+      width: 55px;
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.2rem;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .square.light {
+      background: #ffffff;
+    }
+
+    .square.dark {
+      background: #2a2a2a;
+    }
+
+    .square:hover {
+      filter: brightness(1.1);
+    }
+
+    .queen {
+      filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.5));
+      transition: all 0.3s ease;
+    }
+
+    .queen.safe {
+      color: var(--safe-green);
+      text-shadow: 0 0 15px rgba(46, 204, 113, 0.5);
+    }
+
+    .queen.conflict {
+      color: var(--conflict-red);
+      text-shadow: 0 0 15px rgba(231, 76, 60, 0.5);
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+    }
+
+    /* Filtros de fitness */
+    .fitness-filter {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* Chips de filtro (fitness) */
+    .fitness-btn {
+      padding: 10px 18px;
+      font-size: 1rem;
+      font-weight: 600;
+      font-family: 'Cinzel', serif;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 255, 255, 0.7);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      min-width: 50px;
+    }
+
+    .fitness-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(212, 175, 55, 0.5);
+      color: var(--chess-light);
+    }
+
+    .fitness-btn.active {
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: var(--chess-dark);
+      border-color: var(--gold);
+      font-weight: 600;
+      box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+    }
+
+    /* Erro */
+    .error {
+      background: rgba(231, 76, 60, 0.2);
+      color: #ff6b6b;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 20px 0;
+      text-align: center;
+      border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+
+    /* Legenda */
+    .legend {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 40px;
+      margin-top: 35px;
+      padding-top: 25px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      position: relative;
+    }
+
+    .legend-items {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .legend .skip-animation-btn {
+      position: absolute;
+      right: 0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.65rem;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .legend-item span:last-child {
+      padding-top: 5px;
+    }
+
+    .legend-queen {
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .legend-queen.safe { color: var(--safe-green); }
+    .legend-queen.conflict { color: var(--conflict-red); }
+
+    /* Responsivo */
+    @media (max-width: 900px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .left-panel {
+        position: static;
+      }
+
+      h1 {
+        font-size: 2rem;
+        letter-spacing: 2px;
+      }
+
+      .square {
+        width: 40px;
+        height: 40px;
+        font-size: 1.6rem;
+      }
+
+      .card {
+        padding: 20px;
+      }
+
+      .info {
+        gap: 30px;
+      }
+
+      .info-value {
+        font-size: 1.5rem;
+      }
+
+      .nav-buttons button {
+        min-width: auto;
+        padding: 10px 20px;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      /* Loading no mobile - entre os cards */
+      #loading {
+        position: static;
+        transform: none;
+        margin: 20px auto;
+        width: fit-content;
+      }
+
+      /* Stats bar responsiva */
+      .stats-bar {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px;
+        align-items: center;
+      }
+
+      .stat-item {
+        display: flex;
+        justify-content: flex-start;
+        width: 280px;
+      }
+
+      .stat-icon {
+        width: 40px;
+        min-width: 40px;
+        text-align: center;
+        display: inline-block;
+      }
+
+      .stat-divider {
+        width: 80%;
+        height: 1px;
+        background: linear-gradient(to right, transparent, rgba(212, 175, 55, 0.3), transparent);
+      }
+
+      /* Board area responsiva */
+      .board-area {
+        flex-direction: column;
+        align-items: center;
+        min-width: auto;
+        margin-left: 10px;
+      }
+
+      /* Resetar margem do tabuleiro no mobile */
+      .board-area:has(.menu-column.visible) .board-column {
+        margin-left: 0;
+      }
+
+      /* Esconder cards quando não visíveis */
+      .menu-column,
+      .data-column {
+        display: none;
+        height: 0;
+        min-height: 0;
+        max-height: 0;
+        overflow: hidden;
+      }
+
+      .menu-column.visible,
+      .data-column.visible {
+        display: block;
+        height: auto;
+        min-height: auto;
+        max-height: none;
+        width: 400px;
+        max-width: 400px;
+        min-width: 400px;
+      }
+
+      .menu-panel {
+        width: 400px;
+        height: auto;
+        min-height: auto;
+        max-height: none;
+        font-size: 1.1rem;
+        box-sizing: border-box;
+        overflow: visible;
+      }
+
+      .data-only-panel {
+        width: 400px;
+        height: 320px !important;
+        min-height: 320px !important;
+        max-height: 320px !important;
+        font-size: 1.1rem;
+        box-sizing: border-box;
+        overflow: hidden;
+      }
+
+      .menu-title {
+        font-size: 1.3rem;
+      }
+
+      .menu-section .filter-chips {
+        max-height: none;
+        overflow-y: visible;
+      }
+
+      .menu-section .filter-chips .fitness-btn {
+        font-size: 1rem;
+        padding: 10px 18px;
+      }
+
+      .menu-section .view-tab {
+        font-size: 0.95rem;
+      }
+
+      .styled-data-table {
+        font-size: 1.1rem;
+      }
+
+      .styled-data-table th {
+        font-size: 0.95rem;
+        padding: 14px 12px;
+      }
+
+      .styled-data-table td {
+        font-size: 1.2rem !important;
+        padding: 12px 10px;
+      }
+
+      .styled-data-table td:last-child {
+        font-size: 1.2rem !important;
+        font-family: 'Cinzel', serif !important;
+      }
+
+      .data-only-panel .data-panel {
+        max-height: 220px;
+        overflow-y: auto;
+      }
+
+      /* Botão de pular animação no mobile */
+      .skip-animation-btn {
+        margin-bottom: 15px;
+      }
+
+      .skip-animation-btn.mobile-skip {
+        display: none;
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+
+      .skip-animation-btn.mobile-skip.visible {
+        display: flex !important;
+      }
+
+      /* Esconder botão original da legenda no mobile */
+      .legend .skip-animation-btn {
+        display: none !important;
+      }
+
+      /* Legenda responsiva */
+      .legend {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .legend .skip-animation-btn {
+        position: static;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 15px 10px;
+        min-width: auto;
+      }
+
+      h1 {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+      }
+
+      .subtitle {
+        font-size: 0.75rem;
+      }
+
+      .crown-icon {
+        font-size: 2rem;
+      }
+
+      .card {
+        padding: 15px;
+        border-radius: 15px;
+      }
+
+      .card-title {
+        font-size: 1rem;
+      }
+
+      .square {
+        width: 30px;
+        height: 30px;
+        font-size: 1.2rem;
+      }
+
+      .stats-bar {
+        padding: 12px;
+      }
+
+      .stat-icon {
+        font-size: 1.5rem;
+      }
+
+      .stat-value {
+        font-size: 1.1rem;
+      }
+
+      .stat-label {
+        font-size: 0.65rem;
+      }
+
+      .legend-items {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .menu-column.visible,
+      .data-column.visible {
+        max-width: 100%;
+      }
+
+      .view-tab {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+      }
+
+      .fitness-btn {
+        padding: 6px 12px;
+        font-size: 0.75rem;
+        min-width: 38px;
+      }
+
+      .skip-animation-btn {
+        padding: 8px 15px;
+        font-size: 0.8rem;
+      }
+
+      #submitBtn {
+        padding: 14px 20px;
+        font-size: 1rem;
+      }
+
+      .form-item label {
+        font-size: 0.7rem;
+      }
+
+      input[type="number"],
+      select {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+      }
+
+      .board-wrapper {
+        padding: 10px;
+      }
+
+      #loading {
+        padding: 25px 30px;
+        font-size: 1rem;
+      }
+
+      .loading-spinner {
+        width: 30px;
+        height: 30px;
+        margin-right: 10px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .square {
+        width: 25px;
+        height: 25px;
+        font-size: 1rem;
+      }
+
+      h1 {
+        font-size: 1.3rem;
+      }
+
+      .stats-bar {
+        gap: 10px;
+      }
+
+      .stat-item {
+        gap: 6px;
+      }
+
+      .stat-icon {
+        font-size: 1.2rem;
+      }
+
+      .stat-value {
+        font-size: 1rem;
+      }
+    }
+
+    /* Tabela de dados estilizada */
+    .styled-data-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(212, 175, 55, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+      font-size: 1.05em;
+      margin: 0 auto;
+    }
+    .styled-data-table thead {
+      background: linear-gradient(135deg, var(--gold) 0%, #c9a227 50%, var(--gold-light) 100%);
+      position: relative;
+    }
+    .styled-data-table thead::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    }
+    .styled-data-table th {
+      color: var(--chess-dark);
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      padding: 14px 12px;
+      text-align: center;
+      letter-spacing: 1.5px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.2);
+    }
+    .styled-data-table tbody tr {
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .styled-data-table tbody tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+    .styled-data-table tbody tr:hover {
+      background: linear-gradient(90deg, rgba(212, 175, 55, 0.08) 0%, rgba(212, 175, 55, 0.15) 50%, rgba(212, 175, 55, 0.08) 100%);
+      transform: scale(1.01);
+    }
+    .styled-data-table tbody tr:hover td {
+      color: var(--gold-light);
+    }
+    .styled-data-table td {
+      padding: 12px 10px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.85);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-weight: 500;
+      font-family: 'Cinzel', serif;
+      font-size: 1.15rem;
+      transition: all 0.3s ease;
+    }
+    .styled-data-table tbody tr:last-child td {
+      border-bottom: none;
+    }
+    .styled-data-table td:first-child {
+      font-family: 'Cinzel', serif;
+      font-weight: 600;
+      font-size: 1.2rem;
+      color: var(--gold);
+    }
+    .styled-data-table td:last-child {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.2rem;
+      font-family: 'Cinzel', serif;
+    }
+    /* Fim tabela estilizada */
+
+    /* Botão de pular animação */
+    .skip-animation-btn {
+      padding: 10px 20px;
+      font-size: 0.85rem;
+      font-family: 'Raleway', sans-serif;
+      font-weight: 600;
+      background: rgba(212, 175, 55, 0.15);
+      color: var(--gold);
+      border: 1px solid rgba(212, 175, 55, 0.4);
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: none;
+      align-items: center;
+      gap: 8px;
+      white-space: nowrap;
+    }
+
+    .skip-animation-btn:hover {
+      background: rgba(212, 175, 55, 0.25);
+      border-color: var(--gold);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .skip-animation-btn.visible {
+      display: flex;
+    }
+
+    .skip-animation-btn .skip-icon {
+      font-size: 1rem;
+      position: relative;
+      top: -2.5px;
+    }
+
+    /* Esconder botão mobile no desktop */
+    .skip-animation-btn.mobile-skip {
+      display: none !important;
+    }
+
+    /* Nova coluna de dados separada */
+    .data-column {
+      width: 0;
+      opacity: 0;
+      overflow: hidden;
+      transition: all 0.5s ease;
+    }
+
+    .data-column.visible {
+      width: 280px;
+      opacity: 1;
+    }
+
+    .data-only-panel .data-panel {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+      padding: 15px;
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 0.85rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div class="crown-icon">♛</div>
+      <h1>N-Queens Lab</h1>
+      <p class="subtitle">Algoritmo Genético</p>
+    </header>
+    
+    <div class="main-layout">
+      <!-- Painel Esquerdo - Configurações -->
+      <div class="left-panel">
+        <div class="card">
+          <div class="card-title">
+            <span>♛</span> Configurações do Algoritmo
+          </div>
+          <form id="sizeForm" class="form-vertical">
+            <div class="form-item">
+              <label for="boardSize">Tamanho do Tabuleiro</label>
+              <input type="number" id="boardSize" name="n" min="4" value="8" required>
+            </div>
+            
+            <div class="form-item">
+              <label for="populationSize">Tamanho da População</label>
+              <input type="number" id="populationSize" name="populationSize" min="1" value="100" required>
+            </div>
+            
+            <div class="form-item">
+              <label for="maxRounds">Número Máximo de Gerações</label>
+              <input type="number" id="maxRounds" name="maxRounds" min="1" value="50" required>
+            </div>
+            
+            <div class="form-item">
+              <label for="elitismRate">Taxa de Elitismo</label>
+              <input type="number" id="elitismRate" name="elitismRate" min="0" max="1" step="0.01" value="0.1" required>
+            </div>
+            
+            <div class="form-item">
+              <label for="mutationRate">Taxa de Mutação</label>
+              <input type="number" id="mutationRate" name="mutationRate" min="0" max="1" step="0.01" value="0.05" required>
+            </div>
+            
+            <div class="form-item">
+              <label for="crossoverType">Tipo de Cruzamento</label>
+              <select id="crossoverType" name="crossoverType" required>
+                <option value="1" selected>Cruzamento de um ponto</option>
+                <option value="2">Cruzamento de dois pontos</option>
+              </select>
+            </div>
+            
+            <div class="form-item">
+              <label for="selectionType">Tipo de Seleção</label>
+              <select id="selectionType" name="selectionType" required>
+                <option value="1">Aleatória</option>
+                <option value="2">Roleta</option>
+                <option value="3" selected>Torneio</option>
+                <option value="4">Torneio dos Dissimilares</option>
+              </select>
+            </div>
+            
+            <div class="form-item">
+              <label for="tournamentSize">Indivíduos por Torneio</label>
+              <input type="number" id="tournamentSize" name="tournamentSize" min="1" value="2">
+            </div>
+            
+            <button type="submit" id="submitBtn">Executar</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Painel Direito - Visualização -->
+      <div class="right-panel">
+        <div id="results" class="card" style="position: relative;">
+          <div id="loading">
+            <span class="loading-spinner"></span>
+            Executando algoritmo genético...
+          </div>
+          
+          <div class="card-title">
+            <span>♛</span> Visualização do Tabuleiro
+          </div>
+          
+          <!-- Estatísticas principais -->
+          <div class="stats-bar">
+            <div class="stat-item">
+              <span class="stat-icon">♛</span>
+              <div class="stat-content">
+                <span class="stat-value" id="currentFitness">-</span>
+                <span class="stat-label">Rainhas Sem Conflito</span>
+              </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-icon">⚔</span>
+              <div class="stat-content">
+                <span class="stat-value" id="currentGeneration">-</span>
+                <span class="stat-label">Geração</span>
+              </div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+              <span class="stat-icon">⏱</span>
+              <div class="stat-content">
+                <span class="stat-value" id="executionTime">-</span>
+                <span class="stat-label">Tempo de Resolução</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Área de conteúdo com duas colunas -->
+          <div class="board-area" id="boardArea">
+            <!-- Botão de pular animação (aparece acima do tabuleiro no mobile) -->
+            <button class="skip-animation-btn mobile-skip" id="skipAnimationBtnMobile">
+              <span class="skip-icon">⏭</span>
+              <span>Pular Animação</span>
+            </button>
+            
+            <!-- Coluna do tabuleiro -->
+            <div class="board-column">
+              <div id="boardContainer">
+                <div class="board-wrapper">
+                  <div id="board"></div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Coluna do menu (aparece após animação) -->
+            <div class="menu-column" id="menuColumn">
+              <div class="menu-panel">
+                <h3 class="menu-title">Explorar Soluções</h3>
+                
+                <!-- Modos de visualização -->
+                <div class="menu-section">
+                  <span class="menu-label">Modo de Visualização</span>
+                  <div class="view-mode-tabs">
+                    <button class="view-tab active" id="btnByFitness">
+                      <span class="tab-text">Rainhas sem Conflitos</span>
+                    </button>
+                    <button class="view-tab" id="btnByGeneration">
+                      <span class="tab-text">Melhores Gerações</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Filtro por nível -->
+                <div class="menu-section">
+                  <span class="menu-label" id="filterLabel">Filtros</span>
+                  <div class="filter-chips" id="fitnessFilter"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Nova coluna de dados à direita -->
+            <div class="data-column" id="dataColumn">
+              <div class="data-only-panel">
+                <h3 class="menu-title">Dados</h3>
+                <div class="data-panel" id="dataPanel">
+                  Selecione uma opção para ver os dados
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="legend">
+            <div class="legend-items">
+              <div class="legend-item">
+                <span class="legend-queen safe">♛</span>
+                <span>Sem conflito</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-queen conflict">♛</span>
+                <span>Em conflito</span>
+              </div>
+            </div>
+            <button class="skip-animation-btn" id="skipAnimationBtn">
+              <span class="skip-icon">⏭</span>
+              <span>Pular Animação</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let byFitnessData = []; // Dados por nível de fitness
+    let byGenerationData = []; // Dados por geração (progresso)
+    let currentMode = 'fitness'; // 'fitness' ou 'generation'
+    let uniqueFitnessStages = []; // Array com a melhor solução de cada fitness
+    let filteredStages = []; // Etapas filtradas por fitness
+    let currentStageIndex = 0;
+    let currentN = 0;
+    let activeFitness = null;
+    let isPlaying = false;
+    let intervalId = null;
+    const ANIMATION_SPEED = 1000; // 1 segundo por etapa
+
+    const form = document.getElementById('sizeForm');
+    const loading = document.getElementById('loading');
+    const results = document.getElementById('results');
+    const board = document.getElementById('board');
+    const submitBtn = document.getElementById('submitBtn');
+    const selectionTypeSelect = document.getElementById('selectionType');
+    const tournamentSizeInput = document.getElementById('tournamentSize');
+    const tournamentSizeFormItem = tournamentSizeInput.closest('.form-item');
+
+    // Função para habilitar/desabilitar campo de torneio
+    function updateTournamentSizeState() {
+      const selectionType = parseInt(selectionTypeSelect.value);
+      const needsTournament = selectionType === 3 || selectionType === 4;
+      
+      tournamentSizeInput.disabled = !needsTournament;
+      tournamentSizeFormItem.classList.toggle('disabled', !needsTournament);
+      
+      // Adicionar/remover atributo required
+      if (needsTournament) {
+        tournamentSizeInput.setAttribute('required', 'required');
+        if (tournamentSizeInput.value === '') {
+          tournamentSizeInput.value = '2';
+        }
+      } else {
+        tournamentSizeInput.removeAttribute('required');
+        tournamentSizeInput.value = '';
+      }
+    }
+
+    // Chamar ao carregar a página
+    updateTournamentSizeState();
+
+    // Chamar quando mudar o tipo de seleção
+    selectionTypeSelect.addEventListener('change', updateTournamentSizeState);
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const n = parseInt(document.getElementById('boardSize').value);
+      const populationSize = parseInt(document.getElementById('populationSize').value);
+      const elitismRate = parseFloat(document.getElementById('elitismRate').value);
+      const mutationRate = parseFloat(document.getElementById('mutationRate').value);
+      const selectionType = parseInt(document.getElementById('selectionType').value);
+      const crossoverType = parseInt(document.getElementById('crossoverType').value);
+      const maxRounds = parseInt(document.getElementById('maxRounds').value);
+      
+      // Só incluir tournamentSize se for necessário
+      const needsTournament = selectionType === 3 || selectionType === 4;
+      const tournamentSize = needsTournament ? parseInt(document.getElementById('tournamentSize').value) : 2;
+      
+      if (n < 4) {
+        alert('Por favor, escolha um tamanho maior ou igual a 4');
+        return;
+      }
+
+      submitBtn.disabled = true;
+      loading.classList.add('show');
+      board.innerHTML = '';
+      
+      // Esconder tabuleiro e cards laterais
+      document.getElementById('boardContainer').classList.remove('visible');
+      hideMenuColumn();
+
+      try {
+        const params = new URLSearchParams({
+          n,
+          populationSize,
+          tournamentSize,
+          elitismRate,
+          mutationRate,
+          selectionType,
+          crossoverType,
+          maxRounds
+        });
+        
+        const response = await fetch(`http://localhost:3003/run?${params.toString()}`);
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Erro ao executar');
+        }
+
+        byFitnessData = data.byFitness || [];
+        byGenerationData = data.byGeneration || [];
+        currentN = data.n;
+        
+        // Atualizar tempo de execução
+        if (data.executionTime) {
+          const timeEl = document.getElementById('executionTime');
+          timeEl.textContent = `${data.executionTime.milliseconds} ms (${data.executionTime.seconds.toFixed(2)}s)`;
+        }
+        
+        // Se data.n não estiver definido, inferir do tamanho das posições
+        if (!currentN && byFitnessData.length > 0) {
+          currentN = byFitnessData[0].positions.length;
+        } else if (!currentN && byGenerationData.length > 0) {
+          currentN = byGenerationData[0].positions.length;
+        }
+        
+        // Parar animação se estava rodando
+        stopAnimation();
+        
+        // Esconder menu lateral no início
+        hideMenuColumn();
+        
+        results.style.display = 'block';
+        
+        // Aplicar modo atual
+        applyCurrentMode();
+        
+        // Iniciar animação automaticamente
+        startAnimation();
+
+      } catch (error) {
+        results.innerHTML = `<div class="error">❌ Erro: ${error.message}</div>`;
+        results.style.display = 'block';
+      } finally {
+        loading.classList.remove('show');
+        submitBtn.disabled = false;
+      }
+    });
+
+    function applyCurrentMode() {
+      // Define qual conjunto de dados usar
+      const dataSource = currentMode === 'fitness' ? byFitnessData : byGenerationData;
+      uniqueFitnessStages = [...dataSource];
+      
+      // Atualizar botões de modo
+      document.getElementById('btnByFitness').classList.toggle('active', currentMode === 'fitness');
+      document.getElementById('btnByGeneration').classList.toggle('active', currentMode === 'generation');
+      
+      // Atualizar label dos filtros
+      const filterLabel = document.getElementById('filterLabel');
+      filterLabel.textContent = 'Filtros';
+      
+      // Criar filtros
+      createFilters();
+      
+      // Mostrar todos inicialmente
+      filterByValue(null);
+      updateDataPanel();
+    }
+
+    function createFilters() {
+      const filterContainer = document.getElementById('fitnessFilter');
+      filterContainer.innerHTML = '';
+      
+      if (currentMode === 'fitness') {
+        // Botões por nível de fitness
+        uniqueFitnessStages.forEach(stage => {
+          const btn = document.createElement('button');
+          btn.textContent = stage.fitness;
+          btn.className = 'fitness-btn';
+          btn.title = `${stage.fitness} rainhas sem conflito`;
+          btn.onclick = () => filterByValue(stage.fitness);
+          filterContainer.appendChild(btn);
+        });
+      } else {
+        // Botões por geração
+        uniqueFitnessStages.forEach(stage => {
+          const btn = document.createElement('button');
+          btn.textContent = stage.generation;
+          btn.className = 'fitness-btn';
+          btn.title = `Geração ${stage.generation}`;
+          btn.onclick = () => filterByValue(stage.generation);
+          filterContainer.appendChild(btn);
+        });
+      }
+    }
+
+    function filterByValue(value) {
+      stopAnimation();
+      activeFitness = value;
+      
+      if (value === null) {
+        filteredStages = [...uniqueFitnessStages];
+        currentStageIndex = 0;
+      } else {
+        filteredStages = [...uniqueFitnessStages];
+        // Encontrar o índice baseado no modo atual
+        if (currentMode === 'fitness') {
+          currentStageIndex = filteredStages.findIndex(s => s.fitness === value);
+        } else {
+          currentStageIndex = filteredStages.findIndex(s => s.generation === value);
+        }
+        if (currentStageIndex < 0) currentStageIndex = 0;
+      }
+      
+      updateFitnessButtons();
+      renderStage();
+      updateDataPanel();
+      // NÃO inicia animação automaticamente aqui
+    }
+
+    function updateFitnessButtons() {
+      const buttons = document.querySelectorAll('.fitness-btn');
+      const currentStage = filteredStages[currentStageIndex];
+      if (!currentStage) return;
+      
+      const currentValue = currentMode === 'fitness' ? currentStage.fitness : currentStage.generation;
+      
+      buttons.forEach(btn => {
+        const btnValue = parseInt(btn.textContent);
+        if (btnValue === currentValue) {
+          btn.classList.add('active');
+        } else {
+          btn.classList.remove('active');
+        }
+      });
+    }
+
+    function getTrulyNonConflictingQueens(positions) {
+      // Identifica apenas as rainhas que NÃO têm nenhum conflito
+      const safeQueens = new Set();
+      
+      for (let col = 0; col < positions.length; col++) {
+        const row = positions[col];
+        let hasConflict = false;
+        
+        for (let otherCol = 0; otherCol < positions.length; otherCol++) {
+          if (col === otherCol) continue;
+          const otherRow = positions[otherCol];
+          
+          // Verifica se tem conflito com alguma outra rainha
+          if (row === otherRow || Math.abs(row - otherRow) === Math.abs(col - otherCol)) {
+            hasConflict = true;
+            break;
+          }
+        }
+        
+        if (!hasConflict) {
+          safeQueens.add(col);
+        }
+      }
+      
+      return safeQueens;
+    }
+
+    function renderStage() {
+      if (filteredStages.length === 0) {
+        board.innerHTML = '<p>Nenhuma solução encontrada</p>';
+        return;
+      }
+
+      const solution = filteredStages[currentStageIndex];
+      const positions = solution.positions;
+      
+      // Mostrar o container do tabuleiro
+      document.getElementById('boardContainer').classList.add('visible');
+      
+      // Atualizar informações no painel
+      const fitnessEl = document.getElementById('currentFitness');
+      const generationEl = document.getElementById('currentGeneration');
+      
+      if (fitnessEl) fitnessEl.textContent = solution.fitness !== undefined ? solution.fitness : '-';
+      if (generationEl) generationEl.textContent = solution.generation !== undefined ? solution.generation + '°' : '-';
+      
+      // Identificar quais rainhas realmente não têm conflito
+      const safeQueens = getTrulyNonConflictingQueens(positions);
+      
+      // Criar tabuleiro - usar o tamanho das posições se currentN não estiver correto
+      const boardSize = positions.length || currentN;
+      board.innerHTML = '';
+      const squareSize = boardSize <= 8 ? 55 : (boardSize <= 12 ? 45 : 35);
+      board.style.gridTemplateColumns = `repeat(${boardSize}, ${squareSize}px)`;
+      
+      for (let row = 0; row < boardSize; row++) {
+        for (let col = 0; col < boardSize; col++) {
+          const square = document.createElement('div');
+          square.className = `square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+          square.style.width = `${squareSize}px`;
+          square.style.height = `${squareSize}px`;
+          
+          // Verificar se há rainha nesta posição
+          if (positions[col] === row) {
+            const conflictStatus = safeQueens.has(col) ? 'safe' : 'conflict';
+            const queen = document.createElement('span');
+            queen.className = `queen ${conflictStatus}`;
+            queen.textContent = '♛';
+            queen.style.fontSize = `${squareSize * 0.7}px`; // 70% do tamanho do quadrado
+            square.appendChild(queen);
+          }
+          
+          board.appendChild(square);
+          updateDataPanel();
+        }
+      }
+      
+      // Atualizar botão de filtro ativo visualmente
+      updateFitnessButtons();
+    }
+
+    function goToNext() {
+      if (currentStageIndex < filteredStages.length - 1) {
+        currentStageIndex++;
+        renderStage();
+      }
+    }
+
+    function startAnimation() {
+      if (isPlaying) return;
+      
+      isPlaying = true;
+      toggleSkipButton(true);
+      
+      intervalId = setInterval(() => {
+        currentStageIndex++;
+        if (currentStageIndex >= filteredStages.length) {
+          // Parar na última etapa
+          currentStageIndex = filteredStages.length - 1;
+          stopAnimation();
+          // Mostrar menu lateral após terminar animação
+          showMenuColumn();
+          return;
+        }
+        renderStage();
+      }, ANIMATION_SPEED);
+    }
+
+    function stopAnimation() {
+      isPlaying = false;
+      toggleSkipButton(false);
+      if (intervalId) {
+        clearInterval(intervalId);
+        intervalId = null;
+      }
+    }
+
+    function skipAnimation() {
+      stopAnimation();
+      // Ir direto para a última etapa
+      currentStageIndex = filteredStages.length - 1;
+      renderStage();
+      showMenuColumn();
+    }
+
+    function toggleSkipButton(show) {
+      const btn = document.getElementById('skipAnimationBtn');
+      const btnMobile = document.getElementById('skipAnimationBtnMobile');
+      btn.classList.toggle('visible', show);
+      btnMobile.classList.toggle('visible', show);
+    }
+
+    // Event listeners dos botões de pular (desktop e mobile)
+    ['skipAnimationBtn', 'skipAnimationBtnMobile'].forEach(id => {
+      document.getElementById(id).addEventListener('click', skipAnimation);
+    });
+
+    function toggleMenuColumn(show) {
+      const menuColumn = document.getElementById('menuColumn');
+      const dataColumn = document.getElementById('dataColumn');
+      menuColumn.classList.toggle('visible', show);
+      dataColumn.classList.toggle('visible', show);
+    }
+
+    // Aliases para compatibilidade
+    const showMenuColumn = () => toggleMenuColumn(true);
+    const hideMenuColumn = () => toggleMenuColumn(false);
+
+    // Event listeners dos botões de modo
+    document.getElementById('btnByFitness').addEventListener('click', () => {
+      currentMode = 'fitness';
+      stopAnimation();
+      applyCurrentMode();
+    });
+    
+    document.getElementById('btnByGeneration').addEventListener('click', () => {
+      currentMode = 'generation';
+      stopAnimation();
+      applyCurrentMode();
+    });
+
+    function updateDataPanel() {
+      const panel = document.getElementById('dataPanel');
+      panel.innerHTML = '';
+
+      if (currentMode === 'fitness') {
+        renderFitnessTable(panel);
+      } else {
+        renderGenerationSummary(panel);
+      }
+    }
+
+    function renderFitnessTable(container) {
+      const table = document.createElement('table');
+      table.className = 'styled-data-table';
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Rainhas sem conflito</th>
+            <th>Geração</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+
+      const tbody = table.querySelector('tbody');
+
+      byFitnessData.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.fitness}</td>
+          <td>${item.generation}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      container.appendChild(table);
+    }
+
+    function renderGenerationSummary(container) {
+      const table = document.createElement('table');
+      table.className = 'styled-data-table';
+      table.innerHTML = `
+        <thead>
+          <tr>
+            <th>Melhor Geração</th>
+            <th>Melhor Solução</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      `;
+
+      const tbody = table.querySelector('tbody');
+      let maxFitness = null;
+      byGenerationData.forEach(item => {
+        let display;
+        if (maxFitness === null || item.fitness > maxFitness) {
+          maxFitness = item.fitness;
+          display = item.fitness;
+        } else {
+          display = 'não houve alteração';
+        }
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.generation}</td>
+          <td>${display}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+      container.appendChild(table);
+    }
+
+  </script>
+</body>
+</html>

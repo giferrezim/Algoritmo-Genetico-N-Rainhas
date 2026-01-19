@@ -1,0 +1,49 @@
+# ===== Backend C =====
+backend/*.exe
+backend/*.o
+backend/*.a
+backend/*.so
+backend/*.dll
+backend/*.lib
+backend/*.out
+backend/*.obj
+
+# ===== Saídas do programa =====
+backend/dadosNRainhas.txt
+frontend/dadosNRainhas.txt
+dadosNRainhas.txt
+
+# ===== Debug =====
+*.pdb
+*.ilk
+*.d
+*.dSYM/
+
+# ===== Node.js =====
+frontend/node_modules/
+frontend/package-lock.json
+.npm/
+.cache/
+.env
+*.log
+logs/
+npm-debug.log*
+
+# ===== IDEs e Editores =====
+.vscode/
+.vs/
+.idea/
+*.swp
+*.swo
+*~
+
+# ===== Sistema =====
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+desktop.ini
+
+# ===== Temporários =====
+*.tmp
+*.temp
