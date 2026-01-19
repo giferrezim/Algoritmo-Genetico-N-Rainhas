@@ -11,13 +11,13 @@ O projeto foi desenvolvido no contexto de uma **Iniciação Científica**, com f
 
 ---
 
-## 📋 Pré-requisitos
+## Pré-requisitos
 
 - **Windows** com MinGW/MSYS2 (GCC)
 - **Node.js** (v14 ou superior)
 - **Make** (mingw32-make)
 
-## 🚀 Setup Inicial (Após Clonar do GitHub)
+## Setup Inicial (Após Clonar do GitHub)
 
 ```bash
 # Setup automático - compila backend e instala dependências
@@ -27,13 +27,13 @@ mingw32-make setup
 mingw32-make start
 ```
 
-**✨ Não é necessário mudar nenhum caminho ou configuração!** Todos os caminhos são relativos e funcionam automaticamente.
+**Não é necessário mudar nenhum caminho ou configuração!** Todos os caminhos são relativos e funcionam automaticamente.
 
-## 📂 Estrutura do Projeto
+## Estrutura do Projeto
 
 ```
 N-Rainhas/
-├── backend/              # Algoritmo genético em C
+├── backend/             # Algoritmo genético em C
 │   ├── apps/            # Aplicação principal (main.c)
 │   ├── src/             # Implementação das funções
 │   ├── include/         # Arquivos de cabeçalho (.h)
@@ -41,14 +41,13 @@ N-Rainhas/
 │   └── nrainhas.exe     # Executável gerado
 ├── frontend/            # API REST em Node.js
 │   ├── src/             # Código fonte da API
-│   │   └── index.js     # Servidor Express
 │   ├── public/          # Interface HTML
 │   ├── Makefile         # Build do frontend
 │   └── package.json     # Dependências Node.js
 └── Makefile             # Orquestrador raiz
 ```
 
-## 🎯 Uso Rápido
+## Uso Rápido
 
 ### Iniciar o Servidor
 
@@ -68,20 +67,27 @@ Abra o navegador em: `http://localhost:3003`
 http://localhost:3003/run?n=8&populationSize=100&tournamentSize=5&elitismRate=0.1&mutationRate=0.01&selectionType=1&crossoverType=1&maxRounds=1000
 ```
 
-## 📚 Comandos Make Disponíveis
+## Comandos Make Disponíveis
 
-| Comando | Descrição |
-|---------|-----------|
+| Comando              | Descrição                              |
+|----------------------|----------------------------------------|
 | `mingw32-make setup` | Compila backend e instala dependências |
-| `mingw32-make start` | Inicia o projeto completo |
-| `mingw32-make help` | Mostra todos os comandos |
+| `mingw32-make start` | Inicia o projeto completo              |
+| `mingw32-make help`  | Mostra todos os comandos               |
 
 Para ver todos os comandos disponíveis, execute:
 ```bash
 mingw32-make help
 ```
 
-## 📖 Documentação Detalhada
+## Documentação Detalhada
 
 - Ver [backend/README.md](backend/README.md) para detalhes do algoritmo genético
 - Ver [frontend/README.md](frontend/README.md) para detalhes da API REST
+
+## Autoria
+
+Desenvolvido por Giovana Vilela Ferrezim  
+Orientação: Dra. Christiane Regina Soares Brasil  
+Instituição: Universidade Federal de Uberlândia  
+Ano: 2026

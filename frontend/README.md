@@ -25,7 +25,7 @@ cd API
 npm install
 ```
 
-**✨ Os caminhos são configurados automaticamente!** O servidor localiza o executável `nrainhas.exe` na pasta `../backend/` de forma relativa.
+**Os caminhos são configurados automaticamente!** O servidor localiza o executável `nrainhas.exe` na pasta `../backend/` de forma relativa.
 
 ## Execução
 
