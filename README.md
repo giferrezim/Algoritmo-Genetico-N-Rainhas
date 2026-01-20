@@ -34,18 +34,18 @@ mingw32-make start
 
 ```
 N-Rainhas/
-├── backend/             # Algoritmo genético em C
-│   ├── apps/            # Aplicação principal (main.c)
-│   ├── src/             # Implementação das funções
-│   ├── include/         # Arquivos de cabeçalho (.h)
-│   ├── Makefile         # Build do backend
-│   └── nrainhas.exe     # Executável gerado
-├── frontend/            # API REST em Node.js
-│   ├── src/             # Código fonte da API RESTful
-│   ├── public/          # Interface HTML
-│   ├── Makefile         # Build do frontend
-│   └── package.json     # Dependências Node.js
-└── Makefile             # Orquestrador raiz
+├── backend/                 # Núcleo computacional: algoritmo genético em C
+│   ├── apps/                # Aplicação principal (main.c)
+│   ├── src/                 # Implementação das funções do algoritmo
+│   ├── include/             # Arquivos de cabeçalho (.h)
+│   ├── Makefile             # Build do backend
+│   └── nrainhas.exe         # Executável gerado
+├── frontend/                # Servidor de aplicação em Node.js
+│   ├── src/                 # Código-fonte do servidor (API REST)
+│   ├── public/              # Interface web (HTML, CSS e JavaScript)
+│   ├── Makefile             # Build do frontend
+│   └── package.json         # Dependências do Node.js
+└── Makefile                 # Orquestrador de build do projeto
 ```
 
 ## Uso Rápido
