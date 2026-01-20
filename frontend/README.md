@@ -1,11 +1,10 @@
-# Interface e API N-Rainhas
+# Interface e Servidor de Aplicação  
 
-Este módulo implementa a interface do sistema por meio de uma API REST em Node.js. A API é responsável por:
-- Receber os parâmetros do algoritmo genético via requisições HTTP
-- Executar o backend computacional implementado em C (`nrainhas.exe`)
-- Processar e retornar os resultados da execução em formato JSON
-- Servir a interface HTML para interação com o usuário
-
+Este módulo implementa a interface do sistema por meio de um servidor de aplicação desenvolvido em Node.js, responsável por:
+- Receber, via requisições HTTP, os parâmetros de configuração do algoritmo genético definidos pelo usuário;  
+- Executar o backend computacional implementado em linguagem C (nrainhas.exe);  
+- Processar e disponibilizar os resultados da execução em formato estruturado (JSON);  
+- Servir a interface web (HTML, CSS e JavaScript) destinada à interação com o usuário e à visualização dos resultados.  
 
 ## Pré-requisitos
 
