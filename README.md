@@ -4,8 +4,9 @@ Este projeto implementa um sistema para a resolução do **Problema das N-Rainha
 
 O repositório é organizado de forma modular, incluindo:
 
-- **Backend**: núcleo computacional em C.  
-- **Frontend**: camada de aplicação em Node.js e interface para interação com o usuário e visualização dos resultados.  
+**Backend**: núcleo computacional implementado em linguagem C.
+**Servidor de aplicação**: desenvolvido em Node.js, responsável pela comunicação entre o núcleo computacional e a interface web.
+**Frontend**: interface web para interação com o usuário e visualização dos resultados.
 
 O projeto foi desenvolvido no contexto de uma **Iniciação Científica**, com foco em **algoritmos evolutivos** e **problemas de otimização combinatória**.
 
@@ -40,7 +41,7 @@ N-Rainhas/
 │   ├── Makefile         # Build do backend
 │   └── nrainhas.exe     # Executável gerado
 ├── frontend/            # API REST em Node.js
-│   ├── src/             # Código fonte da API
+│   ├── src/             # Código fonte da API RESTful
 │   ├── public/          # Interface HTML
 │   ├── Makefile         # Build do frontend
 │   └── package.json     # Dependências Node.js
@@ -61,7 +62,7 @@ O servidor estará disponível em `http://localhost:3003`
 
 Abra o navegador em: `http://localhost:3003`
 
-### Testar a API Diretamente
+### Testar Diretamente
 
 ```
 http://localhost:3003/run?n=8&populationSize=100&tournamentSize=5&elitismRate=0.1&mutationRate=0.01&selectionType=1&crossoverType=1&maxRounds=1000
@@ -83,7 +84,7 @@ mingw32-make help
 ## Documentação Detalhada
 
 - Ver [backend/README.md](backend/README.md) para detalhes do algoritmo genético
-- Ver [frontend/README.md](frontend/README.md) para detalhes da API REST
+- Ver [frontend/README.md](frontend/README.md) para detalhes do servidor de aplicação e da interface web
 
 ## Autoria
 
