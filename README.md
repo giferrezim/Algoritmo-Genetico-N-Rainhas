@@ -4,9 +4,9 @@ Este projeto implementa um sistema para a resolução do **Problema das N-Rainha
 
 O repositório é organizado de forma modular, incluindo:
 
-**Backend**: núcleo computacional implementado em linguagem C.
-**Servidor de aplicação**: desenvolvido em Node.js, responsável pela comunicação entre o núcleo computacional e a interface web.
-**Frontend**: interface web para interação com o usuário e visualização dos resultados.
+**Backend**: núcleo computacional implementado em linguagem C.  
+**Servidor de aplicação**: desenvolvido em Node.js, responsável pela comunicação entre o núcleo computacional e a interface web.  
+**Frontend**: interface web para interação com o usuário e visualização dos resultados.  
 
 O projeto foi desenvolvido no contexto de uma **Iniciação Científica**, com foco em **algoritmos evolutivos** e **problemas de otimização combinatória**.
 
@@ -83,8 +83,8 @@ mingw32-make help
 
 ## Documentação Detalhada
 
-- Ver [backend/README.md](backend/README.md) para detalhes do algoritmo genético
-- Ver [frontend/README.md](frontend/README.md) para detalhes do servidor de aplicação e da interface web
+- Ver [backend/README.md](backend/README.md) para detalhes do algoritmo genético.
+- Ver [frontend/README.md](frontend/README.md) para detalhes do servidor de aplicação e da interface web.
 
 ## Autoria
 
