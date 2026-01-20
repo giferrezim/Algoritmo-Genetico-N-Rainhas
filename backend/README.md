@@ -9,16 +9,17 @@ Este projeto implementa um algoritmo genético para resolver o problema clássic
 ## Estrutura de Arquivos
 
 ```
-backend/
-├── apps/main.c           # Programa principal
-├── src/                  # Implementações
-│   ├── fitness.c        # Cálculo de fitness
-│   ├── populacao.c      # Gerenciamento da população
-│   ├── selecao.c        # Métodos de seleção
+backend/                          # Núcleo computacional: algoritmo genético em C
+├── apps/main.c                   # Programa principal
+├── src/                          # Implementações
+│   ├── fitness.c                 # Cálculo de fitness
+│   ├── populacao.c               # Gerenciamento da população
+│   ├── selecao.c                 # Métodos de seleção
 │   ├── operadoresDeReproducao.c  # Crossover e mutação
-│   ├── ordenacao.c      # Algoritmos de ordenação
-│   └── print.c          # Saída de dados
-└── include/             # Cabeçalhos (.h)
+│   ├── ordenacao.c               # Algoritmos de ordenação
+│   └── print.c                   # Saída de dados
+├── include/                      # Cabeçalhos (.h)
+└── Makefile                      # Build do backend
 ```
 
 ## Pré-requisitos
