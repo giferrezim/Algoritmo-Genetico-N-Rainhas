@@ -8,8 +8,6 @@ O repositório é organizado de forma modular, incluindo:
 **Servidor de aplicação**: desenvolvido em Node.js, responsável pela comunicação entre o núcleo computacional e a interface web.  
 **Frontend**: interface web para interação com o usuário e visualização dos resultados.  
 
-O projeto foi desenvolvido no contexto de uma **Iniciação Científica**, com foco em **algoritmos evolutivos** e **problemas de otimização combinatória**.
-
 ---
 
 ## Pré-requisitos
@@ -56,17 +54,9 @@ N-Rainhas/
 mingw32-make start
 ```
 
-O servidor estará disponível em `http://localhost:3003`
-
 ### Acessar a Interface
 
-Abra o navegador em: `http://localhost:3003`
-
-### Testar Diretamente
-
-```
-http://localhost:3003/run?n=8&populationSize=100&tournamentSize=5&elitismRate=0.1&mutationRate=0.01&selectionType=1&crossoverType=1&maxRounds=1000
-```
+Abra o navegador em: `http://localhost:3003`  
 
 ## Comandos Make Disponíveis
 
