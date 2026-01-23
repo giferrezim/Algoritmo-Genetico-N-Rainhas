@@ -8,8 +8,6 @@ O repositório é organizado de forma modular, incluindo:
 **Servidor de aplicação**: desenvolvido em Node.js, responsável pela comunicação entre o núcleo computacional e a interface web.  
 **Frontend**: interface web para interação com o usuário e visualização dos resultados.  
 
----
-
 ## Pré-requisitos
 
 - **Windows** com MinGW/MSYS2 (GCC)
