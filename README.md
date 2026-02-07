@@ -4,9 +4,9 @@ Este projeto implementa um sistema para a resolução do **Problema das N-Rainha
 
 O repositório é organizado de forma modular, incluindo:
 
-**Backend**: núcleo computacional implementado em linguagem C.  
-**Servidor de aplicação**: desenvolvido em Node.js, responsável pela comunicação entre o núcleo computacional e a interface web.  
-**Frontend**: interface web para interação com o usuário e visualização dos resultados.  
+- **Backend**: núcleo computacional implementado em linguagem C.  
+- **Servidor de aplicação**: desenvolvido em Node.js, responsável pela comunicação entre o núcleo computacional e a interface web.  
+- **Frontend**: interface web para interação com o usuário e visualização dos resultados.  
 
 ## Pré-requisitos
 
@@ -26,6 +26,11 @@ mingw32-make start
 
 **Não é necessário mudar nenhum caminho ou configuração!** Todos os caminhos são relativos e funcionam automaticamente.
 
+### Acessar a Interface
+
+O servidor iniciará na porta `3003` (ou na porta definida pela variável de ambiente `PORT`).  
+Acesse `http://localhost:3003/` no navegador para visualizar a interface web.
+
 ## Estrutura do Projeto
 
 ```
@@ -44,30 +49,13 @@ N-Rainhas/
 └── Makefile                 # Orquestrador de build do projeto
 ```
 
-## Uso Rápido
-
-### Iniciar o Servidor
-
-```bash
-mingw32-make start
-```
-
-### Acessar a Interface
-
-Abra o navegador em: `http://localhost:3003`  
-
 ## Comandos Make Disponíveis
 
 | Comando              | Descrição                              |
 |----------------------|----------------------------------------|
 | `mingw32-make setup` | Compila backend e instala dependências |
 | `mingw32-make start` | Inicia o projeto completo              |
-| `mingw32-make help`  | Mostra todos os comandos               |
-
-Para ver todos os comandos disponíveis, execute:
-```bash
-mingw32-make help
-```
+| `mingw32-make help`  | Mostra todos os comandos disponíveis   |
 
 ## Documentação Detalhada
 
