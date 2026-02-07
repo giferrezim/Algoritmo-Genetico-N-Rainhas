@@ -26,7 +26,7 @@ mingw32-make start
 
 **Não é necessário mudar nenhum caminho ou configuração!** Todos os caminhos são relativos e funcionam automaticamente.
 
-### Acessar a Interface
+## Acessar a Interface
 
 O servidor iniciará na porta `3003` (ou na porta definida pela variável de ambiente `PORT`).  
 Acesse `http://localhost:3003/` no navegador para visualizar a interface web.
