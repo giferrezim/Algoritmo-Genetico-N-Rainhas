@@ -60,7 +60,7 @@ N-Rainhas/
 ## Documentação Detalhada
 
 - Ver [backend/README.md](backend/README.md) para detalhes do algoritmo genético.
-- Ver [frontend/README.md](frontend/README.md) para detalhes do servidor de aplicação e da interface web.
+- Ver [frontend/README.md](frontend/README.md) para detalhes do servidor Node.js e da interface web.
 
 ## Autoria
 
