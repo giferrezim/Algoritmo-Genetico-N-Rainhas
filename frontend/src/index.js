@@ -17,10 +17,6 @@ app.use(cors());
 // Servir arquivos estáticos do diretório public
 app.use(express.static(path.join(__dirname, '../public')));
 
-app.get('/', (req, res) => {
-  res.send('Hello from the Express server!');
-});
-
 // Rota para executar o binário com argumentos passados como query params
 app.get('/run', (req, res) => {
   // Parsear e validar todos os parâmetros
