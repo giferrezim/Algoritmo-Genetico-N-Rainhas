@@ -13,10 +13,9 @@ Este módulo implementa a interface do sistema por meio de um servidor de aplica
 
 ## Instalação
 
-1. Clone o repositório:
+1. Navegue até a pasta do frontend:
 ```bash
-git clone <seu-repositorio>
-cd API
+cd frontend
 ```
 
 2. Instale as dependências:
@@ -40,21 +39,11 @@ mingw32-make run
 
 O servidor iniciará na porta `3003` (ou na porta definida pela variável de ambiente `PORT`).
 
-## Endpoints Disponíveis
+Acesse `http://localhost:3003/` no navegador para visualizar a interface web.
 
-### GET `/`
-Retorna a interface HTML principal do sistema.
+## Parâmetros Configuráveis
 
-**Resposta**: Arquivo HTML com interface para configuração e visualização dos resultados.
-
-### GET `/run`
-Executa o algoritmo genético com os parâmetros especificados.
-
-**Resposta**: JSON contendo os dados da execução (população por fitness, por geração e tempo de execução).
-
-### Parâmetros do Endpoint `/run`
-
-O endpoint `/run` recebe, via query string, os principais parâmetros do algoritmo genético, como tamanho do tabuleiro, população, método de seleção, taxas de elitismo e mutação, tipo de crossover e número máximo de gerações.
+A interface permite configurar os seguintes parâmetros do algoritmo genético:
 
 | Parâmetro        | Tipo  | Descrição                          |
 |------------------|-------|------------------------------------|
@@ -66,17 +55,6 @@ O endpoint `/run` recebe, via query string, os principais parâmetros do algorit
 | `selectionType`  | int   | Tipo de seleção (1–4)              |
 | `crossoverType`  | int   | Tipo de cruzamento (1 ou 2)        |
 | `maxRounds`      | int   | Número máximo de gerações          |
-
-## Exemplo de chamada
-
-```http
-GET http://localhost:3003/run?n=8&populationSize=100&tournamentSize=2&elitismRate=0.1&mutationRate=0.05&selectionType=3&crossoverType=1&maxRounds=100
-```
-
-**Forma relativa**
-```
-GET /run?n=8&populationSize=100&tournamentSize=2&elitismRate=0.1&mutationRate=0.05&selectionType=3&crossoverType=1&maxRounds=100
-```
 
 ## Autoria
 
