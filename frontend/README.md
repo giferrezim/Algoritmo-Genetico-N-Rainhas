@@ -37,8 +37,9 @@ Ou usando o Makefile:
 mingw32-make run
 ```
 
-O servidor iniciará na porta `3003` (ou na porta definida pela variável de ambiente `PORT`).
+## Acessar a Interface
 
+O servidor iniciará na porta `3003` (ou na porta definida pela variável de ambiente `PORT`).  
 Acesse `http://localhost:3003/` no navegador para visualizar a interface web.
 
 ## Parâmetros Configuráveis
