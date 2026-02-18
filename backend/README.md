@@ -6,54 +6,41 @@ Solução do problema das N-Rainhas por meio de um Algoritmo Genético implement
 
 Este projeto implementa um algoritmo genético para resolver o problema clássico das N-Rainhas, onde o objetivo é posicionar N rainhas em um tabuleiro NxN de forma que nenhuma rainha ataque outra. O algoritmo utiliza técnicas de seleção por torneio, cruzamento, mutação e elitismo para evoluir a população e encontrar soluções ótimas.
 
+## Pré-requisitos
+
+- GCC (MinGW ou MSYS2 no Windows)
+
 ## Estrutura de Arquivos
 
 ```
-backend/
-├── apps/main.c           # Programa principal
-├── src/                  # Implementações
-│   ├── fitness.c        # Cálculo de fitness
-│   ├── populacao.c      # Gerenciamento da população
-│   ├── selecao.c        # Métodos de seleção
+backend/                          # Núcleo computacional: algoritmo genético em C
+├── apps/main.c                   # Programa principal
+├── src/                          # Implementações
+│   ├── fitness.c                 # Cálculo de fitness
+│   ├── populacao.c               # Gerenciamento da população
+│   ├── selecao.c                 # Métodos de seleção
 │   ├── operadoresDeReproducao.c  # Crossover e mutação
-│   ├── ordenacao.c      # Algoritmos de ordenação
-│   └── print.c          # Saída de dados
-└── include/             # Cabeçalhos (.h)
+│   ├── ordenacao.c               # Algoritmos de ordenação
+│   └── print.c                   # Saída de dados
+├── include/                      # Cabeçalhos (.h)
+└── Makefile                      # Build do backend
 ```
 
-## Pré-requisitos
+## Execução
 
-- GCC (GNU Compiler Collection), via MinGW ou MSYS2
-- Sistema operacional Windows
-- Suporte ao padrão C99 ou superior
-
-## Compilação usando Makefile (Recomendado)
-
-O projeto inclui um Makefile para facilitar a compilação. No Windows com MinGW, use:
+Após compilar, use o Makefile para compilar e executar diretamente. No Windows, use:
 
 ```bash
-mingw32-make
+mingw32-make run
 ```
 
 Em sistemas Linux ou com Make instalado, use:
 
 ```bash
-make
+make run
 ```
 
-## Execução
-
-Após compilar, execute o programa no Windows:
-
-```bash
-.\nrainhas.exe
-```
-
-Ou use o Makefile para compilar e executar diretamente:
-
-```bash
-mingw32-make run
-```
+## Parâmetros Configuráveis
 
 O programa solicitará os seguintes parâmetros:
 
@@ -84,18 +71,6 @@ Digite a taxa de mutacao: 0.05
 Digite o tipo de cruzamento (1- Cruzamento de um ponto, 2- Cruzamento de dois pontos): 1
 Digite o numero maximo de rodadas: 50
 ```
-
-## Algoritmo
-
-O algoritmo genético implementado segue os seguintes passos:
-
-1. Inicialização de uma população aleatória
-2. Avaliação do fitness de cada indivíduo
-3. Seleção dos melhores indivíduos
-4. Aplicação de elitismo
-5. Reprodução
-6. Mutação
-7. Repetição dos passos 2-6 até atingir o fitness ideal ou o número máximo de gerações
 
 ## Função de Fitness
 

@@ -13,7 +13,7 @@ setup: backend frontend-install
 	@echo "===================================="
 	@echo "Setup completo!"
 	@echo "Para iniciar o projeto:"
-	@echo "  make start    - Inicia backend e frontend"
+	@echo "mingw32-make start - Inicia backend e frontend"
 	@echo "===================================="
 
 # Iniciar o projeto (backend + frontend)
