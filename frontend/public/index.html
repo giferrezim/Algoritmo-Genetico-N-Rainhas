@@ -1522,7 +1522,7 @@
         // Atualizar tempo de execução
         if (data.executionTime) {
           const timeEl = document.getElementById('executionTime');
-          timeEl.textContent = `${data.executionTime.milliseconds} ms (${data.executionTime.seconds.toFixed(2)}s)`;
+          timeEl.textContent = `${data.executionTime.milliseconds} ms`;
         }
         
         // Se data.n não estiver definido, inferir do tamanho das posições

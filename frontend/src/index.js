@@ -5,7 +5,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Necessário para ES Modules (substitui __dirname)
+// Necessário para ES Modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -147,7 +147,7 @@ app.get('/run', (req, res) => {
           continue;
         }
         
-        // Tentar parsear o tempo de execução
+        // Tempo de execução
         if (line.includes('Tempo para encontrar melhor fitness:')) {
           const match = line.match(/(\d+)\s*ms\s*\(([0-9.]+)\s*segundos\)/);
           if (match) {
