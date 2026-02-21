@@ -43,7 +43,7 @@ void cruzamentoDoisPontos(int *indice, int **pai, int **proximaPopulacao){
             filho[i] = pai[0][i];
     }
 
-    // Adiciona o filho na popula��o
+    // Adiciona o filho na população
     for (i=0; i<TAMANHOTABULEIRO; i++)
         proximaPopulacao[*indice][i] = filho[i];
 
