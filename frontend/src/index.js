@@ -55,10 +55,12 @@ app.get('/run', (req, res) => {
     return res.status(400).json({ error: 'Número de rodadas inválido' });
   }
 
+  // Iniciar o processo do executável
   const child = spawn(path.join(__dirname, '../../backend/nrainhas.exe'), [], {
     cwd: path.join(__dirname, '../../backend')
   });
   
+  // Variáveis para acumular stdout e stderr
   let stdout = '';
   let stderr = '';
   let responseEnviado = false;
@@ -73,16 +75,19 @@ app.get('/run', (req, res) => {
     }
   }, 60000);
   
+  // Coletar saída do processo
   child.stdout.on('data', (data) => {
     const texto = data.toString();
     stdout += texto;
   });
   
+  // Coletar erros do processo
   child.stderr.on('data', (data) => {
     const texto = data.toString();
     stderr += texto;
   });
   
+  // Tratar erros ao iniciar o processo
   child.on('error', (err) => {
     console.error('Erro ao iniciar processo:', err);
     clearTimeout(timeout);
@@ -92,6 +97,7 @@ app.get('/run', (req, res) => {
     }
   });
   
+  // Quando o processo terminar, ler o arquivo de saída e enviar a resposta
   child.on('close', (code) => {
     clearTimeout(timeout);
     
@@ -161,7 +167,7 @@ app.get('/run', (req, res) => {
           continue;
         }
         
-        // Processar dados
+        // Processar linhas de dados dependendo do modo
         if (mode === 'fitness') {
           const parts = line.split(/\s+/);
           if (parts.length >= 3) {
