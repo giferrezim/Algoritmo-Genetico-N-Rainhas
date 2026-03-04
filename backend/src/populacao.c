@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <string.h> // Para memcmp
+#include <string.h>
 #include "main.h"
 #include "populacao.h"
 #include "fitness.h"
@@ -49,6 +49,7 @@ int evoluiPopulacao(int rodada, int **individuosTorneio, int **pai, int *fitness
         }
 
         mutacao(indice, proximaPopulacao);
+        buscaLocal(indice, proximaPopulacao);
 
     } while (indiceInicio < TAMANHOPOPULACAO);
 
@@ -60,7 +61,8 @@ int evoluiPopulacao(int rodada, int **individuosTorneio, int **pai, int *fitness
 }
 
 /*
-    Inicializa  a população inicial com uma rainha em cada coluna, mas a linha é colocada de forma aleatória
+    Inicializa  a população inicial com permutações aleatórias de 0 a N-1
+    Evitando conflitos de linha já na população inicial
 */
 
 // Função para verificar se um indivíduo já existe na população
@@ -78,19 +80,23 @@ void inicializaPopulacao(int **populacaoAtual) {
     int tamanhoAtual = 0;
 
     while (tamanhoAtual < TAMANHOPOPULACAO) {
-        // Gera um indivíduo aleatório
-        for (int j = 0; j < TAMANHOTABULEIRO; j++) {
-            individuo[j] = rand() % TAMANHOTABULEIRO;
+        // Gera uma permutação aleatória
+        // Garante que cada linha apareça exatamente uma vez
+        // Eliminando conflitos de linha já na população inicial
+        for (int j = 0; j < TAMANHOTABULEIRO; j++)
+            individuo[j] = j;
+        for (int j = TAMANHOTABULEIRO - 1; j > 0; j--) {
+            int r = rand() % (j + 1);
+            int tmp = individuo[j];
+            individuo[j] = individuo[r];
+            individuo[r] = tmp;
         }
 
         // Verifica duplicata
         if (!existeDuplicata(populacaoAtual, individuo, tamanhoAtual)) {
-            // Adiciona à população
-            for (int j = 0; j < TAMANHOTABULEIRO; j++) {
+            for (int j = 0; j < TAMANHOTABULEIRO; j++)
                 populacaoAtual[tamanhoAtual][j] = individuo[j];
-            }
             tamanhoAtual++;
         }
-        // Caso seja duplicata, o while gera outro indivíduo
     }
 }
