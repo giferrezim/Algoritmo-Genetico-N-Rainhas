@@ -1,12 +1,12 @@
 # Sistema Computacional para o Problema das N-Rainhas
 
-Este projeto implementa um sistema para a resolução do **Problema das N-Rainhas** utilizando um **Algoritmo Genético**.  
+Este repositório apresenta o sistema computacional desenvolvido no âmbito de um projeto de Iniciação Científica, cujo objetivo foi aprimorar a pesquisa de Ribeiro por meio da reformulação do Algoritmo Genético aplicado ao Problema das N-Rainhas. As melhorias propostas incluem a redução do custo computacional, a inclusão de uma busca local que testa trocas alternativas e mantém a melhor solução encontrada, além do desenvolvimento de uma interface web interativa que permite ao usuário definir os parâmetros do algoritmo genético e visualizar as soluções obtidas.
+
+Também é disponibilizada uma tabela comparativa de resultados experimentais, contendo médias e desvios padrão do número de gerações até a convergência para diferentes instâncias do problema, permitindo analisar o desempenho do método proposto em relação à implementação original de Ribeiro.
 
 O repositório é organizado de forma modular, incluindo:
-
-- **Backend**: núcleo computacional implementado em linguagem C.  
-- **Servidor de aplicação**: desenvolvido em Node.js, responsável pela comunicação entre o núcleo computacional e a interface web.  
-- **Frontend**: interface web para interação com o usuário e visualização dos resultados.  
+- **Backend:** núcleo computacional implementado em linguagem C, responsável pela execução do algoritmo genético para a resolução do Problema das N-Rainhas.
+- **Frontend:** camada responsável pela interação com o usuário, composta por um servidor de aplicação desenvolvido em Node.js que realiza a comunicação com o núcleo computacional e por uma interface web que permite definir parâmetros do algoritmo genético e visualizar as soluções obtidas.
 
 ## Pré-requisitos
 
