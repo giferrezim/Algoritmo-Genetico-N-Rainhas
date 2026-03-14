@@ -2,7 +2,7 @@
 
 Este repositório apresenta o sistema computacional desenvolvido no âmbito de um projeto de Iniciação Científica, cujo objetivo foi aprimorar a pesquisa de Ribeiro por meio da reformulação do Algoritmo Genético aplicado ao Problema das N-Rainhas. As melhorias propostas incluem a redução do custo computacional, a inclusão de uma busca local que testa trocas alternativas e mantém a melhor solução encontrada, além do desenvolvimento de uma interface web interativa que permite ao usuário definir os parâmetros do algoritmo genético e visualizar as soluções obtidas.
 
-Também é disponibilizada uma tabela comparativa de resultados experimentais, contendo médias e desvios padrão do número de gerações até a convergência para diferentes instâncias do problema, permitindo analisar o desempenho do método proposto em relação à implementação original de Ribeiro.
+Também é disponibilizada uma tabela comparativa de resultados experimentais, contendo médias e desvios padrão do número de gerações até a convergência para diferentes instâncias do problema. Essa comparação permite analisar o desempenho do método proposto em relação à implementação original de Ribeiro.
 
 O repositório é organizado de forma modular, incluindo:
 - **Backend:** núcleo computacional implementado em linguagem C, responsável pela execução do algoritmo genético para a resolução do Problema das N-Rainhas.
