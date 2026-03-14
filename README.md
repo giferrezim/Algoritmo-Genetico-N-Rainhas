@@ -1,12 +1,8 @@
 # Sistema Computacional para o Problema das N-Rainhas
 
-Este repositório apresenta o sistema computacional desenvolvido no âmbito de um projeto de Iniciação Científica, cujo objetivo foi aprimorar a pesquisa de Ribeiro por meio da reformulação do Algoritmo Genético aplicado ao Problema das N-Rainhas. As melhorias propostas incluem a redução do custo computacional, a inclusão de uma busca local que testa trocas alternativas e mantém a melhor solução encontrada, além do desenvolvimento de uma interface web interativa que permite ao usuário definir os parâmetros do algoritmo genético e visualizar as soluções obtidas.
+Este repositório apresenta o sistema computacional desenvolvido no âmbito de um projeto de Iniciação Científica, cujo objetivo foi aprimorar a pesquisa de Ribeiro por meio da reformulação do Algoritmo Genético aplicado ao Problema das N-Rainhas. As melhorias propostas incluem a redução do custo computacional, a inclusão de uma busca local que testa trocas alternativas e mantém a melhor solução encontrada, além do desenvolvimento de uma interface web interativa que permite ao usuário definir os parâmetros do algoritmo genético e visualizar as soluções obtidas.  
 
 Também é disponibilizada uma tabela comparativa de resultados experimentais, contendo médias e desvios padrão do número de gerações até a convergência para diferentes instâncias do problema. Essa comparação permite analisar o desempenho do método proposto em relação à implementação original de Ribeiro. Essa tabela pode ser consultada em [Resultados Experimentais](Resultados_experimentais.md).  
-
-O repositório é organizado de forma modular, incluindo:
-- **Backend:** núcleo computacional implementado em linguagem C, responsável pela execução do algoritmo genético para a resolução do Problema das N-Rainhas.
-- **Frontend:** camada responsável pela interação com o usuário, composta por um servidor de aplicação desenvolvido em Node.js que realiza a comunicação com o núcleo computacional e por uma interface web que permite definir parâmetros do algoritmo genético e visualizar as soluções obtidas.
 
 ## Pré-requisitos
 
@@ -17,7 +13,7 @@ O repositório é organizado de forma modular, incluindo:
 ## Setup Inicial (Após Clonar do GitHub)
 
 ```bash
-# Setup automático - compila backend e instala dependências
+# Setup automático
 mingw32-make setup
 
 # Inicia o servidor
@@ -26,6 +22,15 @@ mingw32-make start
 
 **Não é necessário mudar nenhum caminho ou configuração!** Todos os caminhos são relativos e funcionam automaticamente.
 
+## Comandos Make Disponíveis
+
+| Comando              | Descrição                              |
+|----------------------|----------------------------------------|
+| `mingw32-make setup` | Compila backend e instala dependências |
+| `mingw32-make start` | Inicia o projeto completo              |
+| `mingw32-make help`  | Mostra todos os comandos disponíveis   |
+
+
 ## Acessar a Interface
 
 O servidor iniciará na porta `3003` (ou na porta definida pela variável de ambiente `PORT`).  
@@ -33,6 +38,12 @@ Acesse `http://localhost:3003/` no navegador para visualizar a interface web.
 
 ## Estrutura do Projeto
 
+O repositório é organizado de forma modular, incluindo:  
+
+- **Backend:** núcleo computacional implementado em linguagem C, responsável pela execução do algoritmo genético para a resolução do Problema das N-Rainhas.
+- **Frontend:** camada responsável pela interação com o usuário, composta por um servidor de aplicação desenvolvido em Node.js que realiza a comunicação com o núcleo computacional e por uma interface web que permite definir parâmetros do algoritmo genético e visualizar as soluções obtidas.  
+
+A estrutura de diretórios do projeto é apresentada a seguir:
 ```
 N-Rainhas/
 ├── backend/                 # Núcleo computacional: algoritmo genético em C
@@ -48,14 +59,6 @@ N-Rainhas/
 │   └── package.json         # Dependências do Node.js
 └── Makefile                 # Orquestrador de build do projeto
 ```
-
-## Comandos Make Disponíveis
-
-| Comando              | Descrição                              |
-|----------------------|----------------------------------------|
-| `mingw32-make setup` | Compila backend e instala dependências |
-| `mingw32-make start` | Inicia o projeto completo              |
-| `mingw32-make help`  | Mostra todos os comandos disponíveis   |
 
 ## Documentação Detalhada
 
