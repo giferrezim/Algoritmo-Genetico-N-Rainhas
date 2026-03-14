@@ -220,15 +220,22 @@ app.get('/run', (req, res) => {
   
   params.push(elitismRate, mutationRate, crossoverType, maxRounds);
   
+  // Evitar crash por escrita em stdin fechado
+  child.stdin.on('error', () => {});
+
   let i = 0;
   
   const sendNext = () => {
     if (i < params.length) {
-      child.stdin.write(String(params[i]) + '\n');
+      if (child.stdin.writable) {
+        child.stdin.write(String(params[i]) + '\n');
+      }
       i++;
       setTimeout(sendNext, 50);
     } else {
-      child.stdin.end();
+      if (child.stdin.writable) {
+        child.stdin.end();
+      }
     }
   };
   
