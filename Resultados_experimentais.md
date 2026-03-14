@@ -4,7 +4,7 @@ O algoritmo genético foi executado para diferentes tamanhos de tabuleiro do Pro
 
 A partir desses dados, foram calculadas as médias e os desvios padrão para cada instância, permitindo avaliar o desempenho e a estabilidade do algoritmo. Os resultados foram comparados com aqueles apresentados na pesquisa de Ribeiro.  
 
-**Tabela — Comparação entre o número médio de gerações até a convergência obtido neste trabalho e os resultados reportados por Ribeiro.**
+**Tabela — Comparação entre os resultados obtidos neste trabalho e os resultados reportados por Ribeiro.**
 
 | N | Média (Ferrezim) | Média (Ribeiro) | Desvio padrão (Ferrezim) | Desvio padrão (Ribeiro) |
 |---:|---:|---:|---:|---:|
