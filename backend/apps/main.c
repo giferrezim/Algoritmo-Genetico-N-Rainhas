@@ -132,6 +132,9 @@ int main(){
     fitnessDaPopulacao = (int*) malloc(TAMANHOPOPULACAO * sizeof(int));
     fitnessTorneio = (int*) malloc(QUANTIDADEINDIVIDUOSPORTORNEIO * sizeof(int));
 
+    // Definir semente aleatória com base no tempo da máquina
+    srand((unsigned int)time(NULL));
+
     // Gerar a população inicial
     inicializaPopulacao(populacaoAtual);
 
