@@ -1510,11 +1510,20 @@
         });
         
         const response = await fetch(`http://localhost:3003/run?${params.toString()}`);
-        const data = await response.json();
+        const responseText = await response.text();
 
         if (!response.ok) {
-          throw new Error(data.error || 'Erro ao executar');
+          let errorMsg = `Erro HTTP ${response.status}`;
+          try {
+            const errData = JSON.parse(responseText);
+            errorMsg = errData.error || errorMsg;
+          } catch {
+            errorMsg = responseText.substring(0, 300) || errorMsg;
+          }
+          throw new Error(errorMsg);
         }
+
+        const data = JSON.parse(responseText);
 
         byFitnessData = data.byFitness || [];
         byGenerationData = data.byGeneration || [];
