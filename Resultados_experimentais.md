@@ -164,4 +164,4 @@ A partir desses dados, foram calculadas as médias para cada instância, permiti
   </tbody>
 </table>
 
-Dessa forma, os resultados indicam que o algoritmo genético proposto encontra soluções válidas com menor número de gerações em todas as instâncias avaliadas, evidenciando melhora de desempenho em relação à implementação de referência.
+Em vista disso, os resultados demonstram que o algoritmo genético proposto encontra soluções válidas em um número menor de gerações para todas as instâncias avaliadas, evidenciando melhoria de desempenho em relação à implementação de referência.
