@@ -41,7 +41,7 @@ Acesse `http://localhost:3003/` no navegador para visualizar a interface web.
 O repositório é organizado de forma modular, incluindo:  
 
 - **Backend:** núcleo computacional implementado em linguagem C, responsável pela execução do algoritmo genético para a resolução do Problema das N-Rainhas.
-- **Frontend:** camada responsável pela interação com o usuário, composta por um servidor de aplicação desenvolvido em Node.js que realiza a comunicação com o núcleo computacional e por uma interface web que permite definir parâmetros do algoritmo genético e visualizar as soluções obtidas.  
+- **Frontend:** camada responsável pela interação com o usuário, composta por um servidor de aplicação desenvolvido em Node.js, que realiza a comunicação com o núcleo computacional, e por uma interface web que permite definir parâmetros do algoritmo genético e visualizar as soluções obtidas.  
 
 A estrutura de diretórios do projeto é apresentada a seguir:
 ```
